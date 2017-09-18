@@ -119,24 +119,21 @@ var list = [1,4,4,4,2,2,4,4,4];
 
 (source: https://adriann.github.io/programming_problems.html)
 */
-
-function translate(str) {
-  // Create variables to be used
-  var pigLatin = '';
-  var regex = /[aeiou]/gi;
-  // Check if the first character is a vowel
-  if (str[0].match(regex)) {
-    pigLatin = str + 'way';
-  } else {
-    // Find how many consonants before the firs vowel.
-    var vowelIndice = str.indexOf(str.match(regex)[0]);
-    // Take the string from the first vowel to the last char
-    // then add the consonants that were previously omitted and add the ending.
-    pigLatin = str.substr(vowelIndice) + str.substr(0, vowelIndice) + 'ay';
-  }
-
-  return pigLatin;
+function letters(word) {
+    return word.split('')
 }
+
+function pigLatinizeWord(word) {
+    var chars = letters(word);
+    return chars.slice(1).join('') + chars[0] + 'ay';
+}
+
+function pigLatinizeSentence(sentence) {
+    return sentence.replace(/\w+/g, pigLatinizeWord)
+}
+
+console.log(pigLatinizeSentence("The quick brown fox"));
+
 /*
 6. Write a function which takes in two arrays and determines if they contain the same number of the same values.
 [], [] -> true
@@ -144,12 +141,45 @@ function translate(str) {
 ["a", "c", "b"], ["a", "b", "c"] -> true
 [1, 1, 1], [1, 1, 1, 1] -> false
 */
+var areEqual = function(arr1,arr2){
+  if (arr1.length !== arr2.length) {  // make sure they are pairs
+    return false;
+  }
+  var arr1Sorted = arr1.sort();  // sort the arrays
+  var arr2Sorted = arr2.sort();
+  console.log(arr1Sorted);
+  console.log(arr2Sorted);
+  for (let i=0; i < arr1Sorted.length; i++) { // since they're both equal, loop over length of the array
+    if (arr1Sorted[i] === arr2Sorted[i]) { //
+      continue;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
 
+console.log(areEqual([], []));
+console.log(areEqual([2, 3, 4], [1, 2, 3]));
+console.log(areEqual(["a", "c", "b"], ["a", "b", "c"]));
+console.log(areEqual([1, 1, 1], [1, 1, 1, 1]));
 /*
 7. Write a function which takes in an array of numbers and a max cutoff value, and returns a new array with elements limited by the cutoff value.
 [1,2,3,4,5,6,7,8], 4 -> [1,2,3,4,4,4,4,4]
 [1,5,7,3,1,5,7], 3 -> [1,3,3,3,1,3,3]
 */
+var cutoff = function(arr,num){
+  for (let i=0; i<arr.length; i++) {
+    if (arr[i] <= num) {  // if where we are in loop is less than or matches the num input, keep looping
+      continue;
+    } else {
+      arr[i] = num; // otherwise, replace where we are in loop with the num input
+    }
+  }
+  return arr; // after the length of whatever array is input, return the "amended array"
+}
+console.log(cutoff([1,2,3,4,5,6,7,8], 4));
+console.log(cutoff([1,5,7,3,1,5,7], 3));
 
 
 /*
@@ -158,7 +188,17 @@ function translate(str) {
 -> [48, 5, 32, 2, 10, 11, 34, 95, 82, 93] (good!)
 -> [1, 1, 24, 63, 45, 84, 17, 11, 59, 13] (bad - duplicated number)
 */
-
+var random = function(){
+  var arr = [];
+  while (arr.length < 10) { // loop until arr.length is 10
+    var randomNum = Math.floor(Math.random() * 100) + 1; // generate random number between 1 and 100
+    if (!arr.includes(randomNum)) { // if the array doesn't include a *unique* random number (i.e. it is not the same as the previous iteration...
+      arr.push(randomNum); // add a random number to the array, until the array contains 10 values...
+    }
+  }
+  return arr;
+}
+console.log(random());
 /*
 9. Write a function which takes two sorted lists and merges them into a new sorted list.
 
@@ -168,7 +208,18 @@ function translate(str) {
 
 (Source: https://adriann.github.io/programming_problems.html)
 */
-
+var merge = function(arr1,arr2){  // accepts two arrays
+  var newArray = [];  // empty array to push into
+  for (let i=0; i < arr1.length; i++) { // loop through array 1
+    newArray.push(arr1[i]) } // push into the new array
+  for (let i=0; i < arr2.length; i++) { // loop through array 2
+    newArray.push(arr2[i]) } // push into the new array
+  newArray.sort(function(a, b){return a - b}); // sort numbers using special math code
+  return newArray;
+}
+console.log(merge([1,2,5,6,9], [3,4,5,10]));
+console.log(merge([], []));
+console.log(merge([-1, 0, 1], [-2, 2]));
 /*
 10. Write a function which, given an array, determines the subarray with the largest sum.
 
